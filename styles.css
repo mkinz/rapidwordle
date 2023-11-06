@@ -1,0 +1,14 @@
+#game-container {
+    margin: 20px;
+    text-align: center;
+  }
+  
+  #feedback {
+    margin-top: 20px;
+    font-size: 1.2em;
+  }
+  
+  #timer, #score {
+    margin-top: 10px;
+  }
+  

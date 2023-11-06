@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>RapidWordle</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div id="game-container">
+    <!-- Game UI elements go here -->
+    <input type="text" id="guessInput" placeholder="Enter your guess" />
+    <button id="guessButton">Guess</button>
+    <div id="feedback"></div>
+    <div id="timer">Time left: <span id="time">180</span> seconds</div>
+    <div id="score">Score: <span id="scoreValue">0</span></div>
+  </div>
+  <script type="module" src="./dist/game.js"></script>
+</body>
+</html>
+
