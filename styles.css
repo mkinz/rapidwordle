@@ -12,3 +12,27 @@
     margin-top: 10px;
   }
   
+
+  #word-grid {
+    display: grid;
+    grid-template-rows: repeat(6, 1fr); /* Adjust based on the number of allowed guesses */
+    gap: 10px;
+  }
+  
+  .word-row {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr); /* Adjust based on word length */
+    gap: 10px;
+  }
+  
+  .word-cell {
+    width: 50px; /* Adjust size as needed */
+    height: 50px; /* Adjust size as needed */
+    border: 2px solid #ddd;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 2em;
+    text-transform: uppercase;
+  }
+  

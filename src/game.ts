@@ -15,7 +15,7 @@ class RapidWordleGame {
   private wordLength: number = 4; // Start with four-letter words
   private guesses: string[] = [];
 
-  constructor(timeLimit: number = 180) {
+  constructor(timeLimit: number = 60) {
     this.timeLimit = timeLimit;
   }
 
@@ -31,7 +31,7 @@ class RapidWordleGame {
     this.score = 0;
     this.wordLength = 4;
     this.guesses = [];
-    this.timeLimit = 180; // Reset time limit
+    this.timeLimit = 60; // Reset time limit
     this.updateTimerDisplay();
     this.updateScoreDisplay();
     // More UI reset logic can be added here
