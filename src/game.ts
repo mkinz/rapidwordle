@@ -21,6 +21,7 @@ class RapidWordleGame {
 
   startGame(): void {
     this.resetGame();
+    this.createGrid();
     this.timerId = window.setInterval(() => this.updateTimer(), 1000);
     this.loadNewWord();
     this.updateTimerDisplay();
@@ -117,6 +118,25 @@ class RapidWordleGame {
     this.displayFeedback("Game over! Your score: " + this.score);
     // Any additional game over logic can be added here
   }
+
+  private createGrid(): void {
+    const grid = document.getElementById('word-grid') as HTMLDivElement;
+    grid.innerHTML = ''; // Clear existing grid if any
+
+    for (let i = 0; i < 6; i++) { // Assuming 6 guesses
+        const row = document.createElement('div');
+        row.className = 'word-row';
+
+        for (let j = 0; j < this.wordLength; j++) { // Based on the word length
+            const cell = document.createElement('div');
+            cell.className = 'word-cell';
+            row.appendChild(cell);
+        }
+
+        grid.appendChild(row);
+    }
+}
+
 }
 
 // This will handle the binding when the DOM is fully loaded
