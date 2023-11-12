@@ -22,8 +22,8 @@ class RapidWordleGame {
   startGame(): void {
     this.resetGame();
     this.createGrid();
-    this.timerId = window.setInterval(() => this.updateTimer(), 1000);
     this.loadNewWord();
+    this.timerId = window.setInterval(() => this.updateTimer(), 1000);
     this.updateTimerDisplay();
     this.updateScoreDisplay();
   }
@@ -100,6 +100,12 @@ class RapidWordleGame {
       this.displayFeedback("Try again.");
     }
     this.updateScoreDisplay();
+
+    const rowIndex = this.guesses.length; // Get the current index before pushing new guess
+    this.updateGrid(guess, rowIndex); // Pass rowIndex to updateGrid
+  
+    this.guesses.push(normalizedGuess); // Then update the guesses array
+  
   }
   
 
@@ -135,6 +141,52 @@ class RapidWordleGame {
 
         grid.appendChild(row);
     }
+  }
+
+  private getLetterFeedback(letter: string, index: number): string {
+    if (this.currentWord[index] === letter) {
+      // The letter is in the correct position
+      return 'correct';
+    } else if (this.currentWord.includes(letter)) {
+      // The letter is in the word but in the wrong position
+      return 'present';
+    } else {
+      // The letter is not in the word
+      return 'absent';
+    }
+  }
+
+  private updateGrid(guess: string, rowIndex: number): void {
+    const rows = document.querySelectorAll('.word-row');
+
+    
+    const currentRow = rows[this.guesses.length - 1] as HTMLDivElement; // Get the current row
+    if (rowIndex < rows.length) {
+      const currentRow = rows[rowIndex] as HTMLDivElement;
+      // Update the cells in the current row
+      guess.split('').forEach((letter, index) => {
+      const cell = currentRow.children[index] as HTMLDivElement;
+      cell.textContent = letter;
+      // TODO: Apply color coding based on feedback
+      // cell.style.backgroundColor = '...';
+      const feedback = this.getLetterFeedback(letter, index); 
+
+      switch(feedback) {
+          case 'correct':
+              cell.style.backgroundColor = 'green';
+              break;
+          case 'present':
+              cell.style.backgroundColor = 'yellow';
+              break;
+          case 'absent':
+              cell.style.backgroundColor = 'grey';
+                  break;
+          }
+      });
+  }
+  else {
+    console.error("Row index out of bounds:", rowIndex);
+  }
 }
 
 }
