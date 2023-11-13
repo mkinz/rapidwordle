@@ -81,8 +81,11 @@ class RapidWordleGame {
   }
 
   submitGuess(guess: string): void {
-    const normalizedGuess = guess.toLowerCase(); // Convert guess to lowercase
+    const normalizedGuess = guess.toLowerCase();
   
+    // ... existing validation logic ...
+  
+    // Only call updateGrid if the guess is the wrong length or incorrect
     if (normalizedGuess.length !== this.wordLength) {
       this.displayFeedback("Incorrect word length.");
       return;
@@ -92,24 +95,22 @@ class RapidWordleGame {
     if (normalizedGuess === this.currentWord) {
       this.score++;
       this.displayFeedback("Correct!");
-
-      this.clearGrid();  // Clear the grid
   
-      // Check if it's time to increase the word length
       if (this.score % 2 === 0) {
         this.wordLength++;
       }
   
       this.loadNewWord();
-      this.createGrid(); // Recreate the grid for the new word length
+      this.clearGrid();
+      this.createGrid();
     } else {
       this.displayFeedback("Try again.");
-      this.updateGrid(guess);
+      this.updateGrid(normalizedGuess); // Make sure this line is present
     }
   
     this.updateScoreDisplay();
-  
   }
+  
 
   private clearGrid(): void {
     const grid = document.getElementById('word-grid') as HTMLDivElement;
@@ -165,6 +166,7 @@ class RapidWordleGame {
   }
 
   private updateGrid(guess: string): void {
+    console.log("Updating grid with guess:", guess);
     const row = document.querySelector('.word-row') as HTMLDivElement;
   
     // Ensure the row exists
@@ -173,28 +175,38 @@ class RapidWordleGame {
       return;
     }
   
-    // Update the cells in the row
+    // Create a copy of currentWord for mutable operations
+    let mutableCurrentWord = this.currentWord;
+  
+    // First pass: Mark correct letters (green)
     guess.split('').forEach((letter, index) => {
-      if (index < row.children.length) {
-        const cell = row.children[index] as HTMLDivElement;
-        cell.textContent = letter;
+      const cell = row.children[index] as HTMLDivElement;
+      cell.textContent = letter;
   
-        const feedback = this.getLetterFeedback(letter, index); 
+      if (letter === mutableCurrentWord[index]) {
+        cell.style.backgroundColor = 'green';
+        // Replace the letter in mutableCurrentWord to prevent duplicate marking
+        mutableCurrentWord = mutableCurrentWord.substring(0, index) + '_' + mutableCurrentWord.substring(index + 1);
+      }
+    });
   
-        switch(feedback) {
-            case 'correct':
-                cell.style.backgroundColor = 'green';
-                break;
-            case 'present':
-                cell.style.backgroundColor = 'yellow';
-                break;
-            case 'absent':
-                cell.style.backgroundColor = 'grey';
-                break;
+    // Second pass: Mark present letters (yellow) and absent letters
+    guess.split('').forEach((letter, index) => {
+      const cell = row.children[index] as HTMLDivElement;
+  
+      if (cell.style.backgroundColor !== 'green') { // Skip already correctly marked letters
+        if (mutableCurrentWord.includes(letter)) {
+          cell.style.backgroundColor = 'yellow';
+          // Update mutableCurrentWord to prevent duplicate marking
+          mutableCurrentWord = mutableCurrentWord.replace(letter, '_');
+        } else {
+          // No specific style for incorrect letters
+          cell.style.backgroundColor = ''; // Or any default color
         }
       }
     });
   }
+  
   
 
 }

@@ -36,5 +36,6 @@
     font-size: 2em;
     text-transform: uppercase;
     margin: 2px; /* Adjust spacing between cells */
+    background-color: grey;
   }
   
