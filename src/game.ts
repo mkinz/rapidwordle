@@ -102,7 +102,7 @@ class RapidWordleGame {
     this.updateScoreDisplay();
 
     const rowIndex = this.guesses.length; // Get the current index before pushing new guess
-    this.updateGrid(guess, rowIndex); // Pass rowIndex to updateGrid
+    this.updateGrid(guess); // Pass rowIndex to updateGrid
   
     this.guesses.push(normalizedGuess); // Then update the guesses array
   
@@ -128,19 +128,19 @@ class RapidWordleGame {
   private createGrid(): void {
     const grid = document.getElementById('word-grid') as HTMLDivElement;
     grid.innerHTML = ''; // Clear existing grid if any
-
-    for (let i = 0; i < 6; i++) { // Assuming 6 guesses
-        const row = document.createElement('div');
-        row.className = 'word-row';
-
-        for (let j = 0; j < this.wordLength; j++) { // Based on the word length
-            const cell = document.createElement('div');
-            cell.className = 'word-cell';
-            row.appendChild(cell);
-        }
-
-        grid.appendChild(row);
+  
+    // Create only one row
+    const row = document.createElement('div');
+    row.className = 'word-row';
+  
+    // Create 4 cells (or cells based on this.wordLength)
+    for (let j = 0; j < this.wordLength; j++) {
+      const cell = document.createElement('div');
+      cell.className = 'word-cell';
+      row.appendChild(cell);
     }
+  
+    grid.appendChild(row);
   }
 
   private getLetterFeedback(letter: string, index: number): string {
@@ -156,38 +156,38 @@ class RapidWordleGame {
     }
   }
 
-  private updateGrid(guess: string, rowIndex: number): void {
-    const rows = document.querySelectorAll('.word-row');
-
-    
-    const currentRow = rows[this.guesses.length - 1] as HTMLDivElement; // Get the current row
-    if (rowIndex < rows.length) {
-      const currentRow = rows[rowIndex] as HTMLDivElement;
-      // Update the cells in the current row
-      guess.split('').forEach((letter, index) => {
-      const cell = currentRow.children[index] as HTMLDivElement;
-      cell.textContent = letter;
-      // TODO: Apply color coding based on feedback
-      // cell.style.backgroundColor = '...';
-      const feedback = this.getLetterFeedback(letter, index); 
-
-      switch(feedback) {
-          case 'correct':
-              cell.style.backgroundColor = 'green';
-              break;
-          case 'present':
-              cell.style.backgroundColor = 'yellow';
-              break;
-          case 'absent':
-              cell.style.backgroundColor = 'grey';
-                  break;
-          }
-      });
+  private updateGrid(guess: string): void {
+    const row = document.querySelector('.word-row') as HTMLDivElement;
+  
+    // Ensure the row exists
+    if (!row) {
+      console.error("No row found in the grid.");
+      return;
+    }
+  
+    // Update the cells in the row
+    guess.split('').forEach((letter, index) => {
+      if (index < row.children.length) {
+        const cell = row.children[index] as HTMLDivElement;
+        cell.textContent = letter;
+  
+        const feedback = this.getLetterFeedback(letter, index); 
+  
+        switch(feedback) {
+            case 'correct':
+                cell.style.backgroundColor = 'green';
+                break;
+            case 'present':
+                cell.style.backgroundColor = 'yellow';
+                break;
+            case 'absent':
+                cell.style.backgroundColor = 'grey';
+                break;
+        }
+      }
+    });
   }
-  else {
-    console.error("Row index out of bounds:", rowIndex);
-  }
-}
+  
 
 }
 
