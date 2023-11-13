@@ -92,22 +92,28 @@ class RapidWordleGame {
     if (normalizedGuess === this.currentWord) {
       this.score++;
       this.displayFeedback("Correct!");
+
+      this.clearGrid();  // Clear the grid
   
       // Check if it's time to increase the word length
       if (this.score % 2 === 0) {
         this.wordLength++;
-        this.loadNewWord();
-        this.createGrid(); // Recreate the grid for the new word length
-      } else {
-        this.loadNewWord();
       }
+  
+      this.loadNewWord();
+      this.createGrid(); // Recreate the grid for the new word length
     } else {
       this.displayFeedback("Try again.");
+      this.updateGrid(guess);
     }
   
-    this.updateGrid(guess);
     this.updateScoreDisplay();
   
+  }
+
+  private clearGrid(): void {
+    const grid = document.getElementById('word-grid') as HTMLDivElement;
+    grid.innerHTML = ''; // Clear the grid's contents
   }
   
 
