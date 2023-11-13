@@ -92,19 +92,21 @@ class RapidWordleGame {
     if (normalizedGuess === this.currentWord) {
       this.score++;
       this.displayFeedback("Correct!");
+  
+      // Check if it's time to increase the word length
       if (this.score % 2 === 0) {
         this.wordLength++;
+        this.loadNewWord();
+        this.createGrid(); // Recreate the grid for the new word length
+      } else {
+        this.loadNewWord();
       }
-      this.loadNewWord();
     } else {
       this.displayFeedback("Try again.");
     }
-    this.updateScoreDisplay();
-
-    const rowIndex = this.guesses.length; // Get the current index before pushing new guess
-    this.updateGrid(guess); // Pass rowIndex to updateGrid
   
-    this.guesses.push(normalizedGuess); // Then update the guesses array
+    this.updateGrid(guess);
+    this.updateScoreDisplay();
   
   }
   
